@@ -1,17 +1,8 @@
-/* eslint-disable n8n-nodes-base/node-param-option-description-identical-to-name */
-/* eslint-disable n8n-nodes-base/node-param-display-name-miscased-id */
-/* eslint-disable n8n-nodes-base/node-param-display-name-miscased-id */
-/* eslint-disable n8n-nodes-base/node-param-description-boolean-without-whether */
-/* eslint-disable n8n-nodes-base/node-param-options-type-unsorted-items */
-
 import { INodeProperties } from 'n8n-workflow'
-
-// @ts-ignore
-import * as helpers from '../../../helpers'
 
 export const properties: INodeProperties[] = [
   {
-    displayName: 'POST /scrape',
+    displayName: 'POST /batch/scrape',
     name: 'operation',
     type: 'notice',
     typeOptions: {
@@ -21,21 +12,24 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
+        operation: ['Batch Scrape'],
       },
     },
   },
   {
-    displayName: 'URL',
-    name: 'url',
+    displayName: 'URLs',
+    name: 'urls',
     type: 'string',
-    default: '',
-    description: 'The URL to scrape',
+    typeOptions: {
+      multipleValues: true,
+    },
+    default: [],
+    description: 'The URLs to scrape',
     required: true,
     routing: {
       request: {
         body: {
-          url: '={{ $value }}',
+          urls: '={{ $value }}',
         },
       },
     },
@@ -45,7 +39,30 @@ export const properties: INodeProperties[] = [
       },
       show: {
         resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
+        operation: ['Batch Scrape'],
+      },
+    },
+  },
+  {
+    displayName: 'Webhook URL',
+    name: 'webhook',
+    type: 'string',
+    default: '',
+    description: 'URL to receive webhook notifications about batch scrape progress',
+    routing: {
+      request: {
+        body: {
+          webhook: '={{ $value }}',
+        },
+      },
+    },
+    displayOptions: {
+      hide: {
+        useCustomBody: [true],
+      },
+      show: {
+        resource: ['Default'],
+        operation: ['Batch Scrape'],
       },
     },
   },
@@ -98,7 +115,7 @@ export const properties: INodeProperties[] = [
       },
       show: {
         resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
+        operation: ['Batch Scrape'],
       },
     },
   },
@@ -193,6 +210,13 @@ export const properties: INodeProperties[] = [
         default: true,
         description: 'Whether to remove base64 encoded images from the output, which may be overwhelmingly long',
       },
+      {
+        displayName: 'Ignore Invalid URLs',
+        name: 'ignoreInvalidURLs',
+        type: 'boolean',
+        default: false,
+        description: 'Whether to ignore invalid URLs and continue with valid ones instead of failing the entire request',
+      },
     ],
     routing: {
       request: {
@@ -203,6 +227,7 @@ export const properties: INodeProperties[] = [
           skipTlsVerification: '={{ $value.skipTlsVerification }}',
           timeout: '={{ $value.timeout }}',
           removeBase64Images: '={{ $value.removeBase64Images }}',
+          ignoreInvalidURLs: '={{ $value.ignoreInvalidURLs }}',
         },
       },
     },
@@ -212,7 +237,7 @@ export const properties: INodeProperties[] = [
       },
       show: {
         resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
+        operation: ['Batch Scrape'],
       },
     },
   },
@@ -264,99 +289,8 @@ export const properties: INodeProperties[] = [
       },
       show: {
         resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
+        operation: ['Batch Scrape'],
         formats: ['extract'],
-      },
-    },
-  },
-  {
-    displayName: 'Actions',
-    name: 'actions',
-    type: 'fixedCollection',
-    default: [],
-    typeOptions: {
-      multipleValues: true,
-    },
-    description: 'List of actions to interact with dynamic content before scraping',
-    placeholder: 'Add Action',
-    options: [
-      {
-        displayName: 'Items',
-        name: 'items',
-        values: [
-          {
-            displayName: 'Type',
-            type: 'options',
-            default: 'wait',
-            options: [
-              {
-                name: 'Wait',
-                value: 'wait',
-              },
-              {
-                name: 'Click',
-                value: 'click',
-              },
-              {
-                name: 'Write',
-                value: 'write',
-              },
-              {
-                name: 'Press',
-                value: 'press',
-              },
-              {
-                name: 'Screenshot',
-                value: 'screenshot',
-              },
-            ],
-            name: 'type',
-          },
-          {
-            displayName: 'Selector',
-            type: 'string',
-            default: '',
-            description: 'The CSS selector for `click` and `write` actions',
-            name: 'selector',
-          },
-          {
-            displayName: 'Milliseconds',
-            type: 'number',
-            default: 0,
-            description: 'Milliseconds to wait for `wait` action',
-            name: 'milliseconds',
-          },
-          {
-            displayName: 'Text',
-            type: 'string',
-            default: '',
-            description: 'Text for `write` action',
-            name: 'text',
-          },
-          {
-            displayName: 'Key',
-            type: 'string',
-            default: '',
-            description: 'Key for `press` action',
-            name: 'key',
-          },
-        ],
-      },
-    ],
-    routing: {
-      request: {
-        body: {
-          actions: '={{$value.items}}',
-        },
-      },
-    },
-    displayOptions: {
-      hide: {
-        useCustomBody: [true],
-      },
-      show: {
-        resource: ['Default'],
-        operation: ['Scrape A Url And Get Its Content'],
       },
     },
   },

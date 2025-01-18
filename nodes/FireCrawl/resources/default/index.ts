@@ -22,29 +22,31 @@ import * as crawlUrlWithWebsocketMonitoring from './crawl-url-with-websocket-mon
 import * as submitACrawlJobWithAWebhook from './submit-a-crawl-job-with-a-webhook'
 import * as scrapeAUrlAndGetItsContent from './scrape-a-url-and-get-its-content'
 import * as mapAWebsiteAndGetUrls from './map-a-website-and-get-urls'
+import * as batchScrape from './batch-scrape'
 
 const operations: INodePropertyOptions[] = [
-  submitACrawlJob.option,
-  checkCrawlJobStatus.option,
-  crawlUrlWithWebsocketMonitoring.option,
-  submitACrawlJobWithAWebhook.option,
-  scrapeAUrlAndGetItsContent.option,
-  mapAWebsiteAndGetUrls.option,
+	submitACrawlJob.option,
+	checkCrawlJobStatus.option,
+	crawlUrlWithWebsocketMonitoring.option,
+	submitACrawlJobWithAWebhook.option,
+	scrapeAUrlAndGetItsContent.option,
+	mapAWebsiteAndGetUrls.option,
+	batchScrape.option,
 ]
 
 export const name = 'Default'
 
 const operationSelect: INodeProperties = {
-  displayName: 'Operation',
-  name: 'operation',
-  type: 'options',
-  noDataExpression: true,
-  displayOptions: {
-    show: {
-      resource: ['Default'],
-    },
-  },
-  default: '',
+	displayName: 'Operation',
+	name: 'operation',
+	type: 'options',
+	noDataExpression: true,
+	displayOptions: {
+		show: {
+			resource: ['Default'],
+		},
+	},
+	default: '',
 }
 
 // overwrite the options of the operationSelect
@@ -54,13 +56,14 @@ operationSelect.options = operations
 operationSelect.default = operations.length > 0 ? operations[0].value : ''
 
 export const rawProperties: INodeProperties[] = [
-  operationSelect,
-  ...submitACrawlJob.properties,
-  ...checkCrawlJobStatus.properties,
-  ...crawlUrlWithWebsocketMonitoring.properties,
-  ...submitACrawlJobWithAWebhook.properties,
-  ...scrapeAUrlAndGetItsContent.properties,
-  ...mapAWebsiteAndGetUrls.properties,
+	operationSelect,
+	...submitACrawlJob.properties,
+	...checkCrawlJobStatus.properties,
+	...crawlUrlWithWebsocketMonitoring.properties,
+	...submitACrawlJobWithAWebhook.properties,
+	...scrapeAUrlAndGetItsContent.properties,
+	...mapAWebsiteAndGetUrls.properties,
+	...batchScrape.properties,
 ]
 
 const { properties, methods } = runHooks(rawProperties)
