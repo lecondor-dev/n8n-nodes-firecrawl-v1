@@ -57,32 +57,32 @@ export const properties: INodeProperties[] = [
     description: 'Output format(s) for the scraped data',
     options: [
       {
-        name: 'Markdown',
-        value: 'markdown',
-      },
-      {
-        name: 'HTML',
-        value: 'html',
-      },
-      {
-        name: 'Raw HTML',
-        value: 'rawHtml',
-      },
-      {
-        name: 'Links',
-        value: 'links',
-      },
-      {
-        name: 'Screenshot',
-        value: 'screenshot',
+        name: 'Extract',
+        value: 'extract',
       },
       {
         name: 'Full Page Screenshot',
         value: 'screenshot@fullPage',
       },
       {
-        name: 'Extract',
-        value: 'extract',
+        name: 'HTML',
+        value: 'html',
+      },
+      {
+        name: 'Links',
+        value: 'links',
+      },
+      {
+        name: 'Markdown',
+        value: 'markdown',
+      },
+      {
+        name: 'Raw HTML',
+        value: 'rawHtml',
+      },
+      {
+        name: 'Screenshot',
+        value: 'screenshot',
       },
     ],
     routing: {
@@ -114,7 +114,7 @@ export const properties: INodeProperties[] = [
         name: 'onlyMainContent',
         type: 'boolean',
         default: true,
-        description: 'Whether to return only the main content of the page excluding headers, navs, footers, etc.',
+        description: 'Whether to return only the main content of the page excluding headers, navs, footers, etc',
       },
       {
         displayName: 'Include Tags',
@@ -159,7 +159,7 @@ export const properties: INodeProperties[] = [
         },
       },
       {
-        displayName: 'Wait For (ms)',
+        displayName: 'Wait for (MS)',
         name: 'waitFor',
         type: 'number',
         default: 0,
@@ -180,7 +180,7 @@ export const properties: INodeProperties[] = [
         description: 'Whether to skip TLS certificate verification when making requests',
       },
       {
-        displayName: 'Timeout (ms)',
+        displayName: 'Timeout (MS)',
         name: 'timeout',
         type: 'number',
         default: 30000,
