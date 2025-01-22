@@ -8,22 +8,300 @@ servers:
 security:
   - BearerAuth: []
 paths:
-  /scrape:
+  /crawl:
     post:
-      summary: Scrape a URL and get its content
-      description: Scrape a given URL to retrieve content in markdown, HTML, or other formats.
+      summary: Submit a crawl job
+      description: Submits a job to crawl a URL and all accessible subpages.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - url
               properties:
                 url:
                   type: string
-                  description: The URL to scrape
+                  description: The URL to crawl.
+                limit:
+                  type: integer
+                  description: Limit the number of pages to crawl.
+                excludePaths:
+                  type: array
+                  items:
+                    type: string
+                  description: List of paths to exclude from the crawl.
+                allowBackwardLinks:
+                  type: boolean
+                  description: >-
+                    Allow crawling pages that are not direct descendants of the
+                    initial URL.
+                webhook:
+                  type: string
+                  description: URL to send webhook events during the crawl process.
+                scrapeOptions:
+                  type: object
+                  description: Scraping options
+                  properties:
+                    formats:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - markdown
+                          - html
+                          - extract
+                      description: Output format(s) for the scraped data.
+                    extract:
+                      type: object
+                      properties:
+                        schema:
+                          type: string
+                          description: The schema for structured data extraction.
+                        systemPrompt:
+                          type: string
+                          description: The system prompt used for extraction.
+                        prompt:
+                          type: string
+                          description: Extraction prompt without schema.
+              required:
+                - url
+      responses:
+        '200':
+          description: Crawl job submitted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                    description: The ID of the submitted crawl job.
+                  url:
+                    type: string
+                    description: API endpoint to check the status of the crawl job.
+        '400':
+          description: 'Bad request, invalid parameters.'
+        '401':
+          description: 'Unauthorized, invalid API key.'
+  '/crawl/{crawl_id}':
+    get:
+      summary: Check Crawl Job Status
+      description: Check the status of a crawl job by its ID and retrieve the result.
+      parameters:
+        - name: crawl_id
+          in: path
+          required: true
+          description: The ID of the crawl job.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Crawl status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: >-
+                      The current status of the crawl (e.g., scraping,
+                      completed).
+                  total:
+                    type: integer
+                    description: Total number of pages identified for crawling.
+                  completed:
+                    type: integer
+                    description: Number of pages crawled so far.
+                  creditsUsed:
+                    type: integer
+                    description: Credits used for this crawl.
+                  expiresAt:
+                    type: string
+                    format: date-time
+                    description: Expiry date for the crawl result.
+                  next:
+                    type: string
+                    description: >-
+                      URL to retrieve the next portion of crawl data if the
+                      response is large.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        markdown:
+                          type: string
+                        html:
+                          type: string
+                        metadata:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            language:
+                              type: string
+                            sourceURL:
+                              type: string
+                            description:
+                              type: string
+                            ogLocaleAlternate:
+                              type: array
+                              items:
+                                type: string
+                            statusCode:
+                              type: integer
+                              description: HTTP status code of the crawled page.
+        '400':
+          description: Bad request.
+        '404':
+          description: Crawl job not found.
+  /crawl/websocket:
+    post:
+      summary: Crawl URL with WebSocket Monitoring
+      description: Initiate a crawl and monitor progress in real-time using WebSocket.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL to crawl.
+                excludePaths:
+                  type: array
+                  items:
+                    type: string
+                  description: List of paths to exclude from the crawl.
+                limit:
+                  type: integer
+                  description: Limit the number of pages to crawl.
+                scrapeOptions:
+                  type: object
+                  description: Scraping options
+                  properties:
+                    formats:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - markdown
+                          - html
+                          - extract
+                      description: Output format(s) for the scraped data.
+                    extract:
+                      type: object
+                      properties:
+                        schema:
+                          type: string
+                          description: The schema for structured data extraction.
+                        systemPrompt:
+                          type: string
+                          description: The system prompt used for extraction.
+                        prompt:
+                          type: string
+                          description: Extraction prompt without schema.
+      responses:
+        '200':
+          description: WebSocket connection initiated successfully.
+        '400':
+          description: 'Bad request, invalid parameters.'
+  /crawl/webhook:
+    post:
+      summary: Submit a crawl job with a webhook
+      description: >-
+        Submits a job to crawl a URL and sends webhook events during the crawl
+        process.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL to crawl.
+                limit:
+                  type: integer
+                  description: Limit the number of pages to crawl.
+                webhook:
+                  type: string
+                  description: URL to send webhook events to.
+                excludePaths:
+                  type: array
+                  items:
+                    type: string
+                  description: List of paths to exclude from the crawl.
+                scrapeOptions:
+                  type: object
+                  description: Scraping options
+                  properties:
+                    formats:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - markdown
+                          - html
+                          - extract
+                      description: Output format(s) for the scraped data.
+                    extract:
+                      type: object
+                      properties:
+                        schema:
+                          type: string
+                          description: The schema for structured data extraction.
+                        systemPrompt:
+                          type: string
+                          description: The system prompt used for extraction.
+                        prompt:
+                          type: string
+                          description: Extraction prompt without schema.
+              required:
+                - url
+      responses:
+        '200':
+          description: Crawl job with webhook submitted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                    description: The ID of the crawl job.
+                  webhook:
+                    type: string
+                    description: Webhook URL used during the crawl process.
+        '400':
+          description: 'Bad request, invalid parameters.'
+        '401':
+          description: 'Unauthorized, invalid API key.'
+  /scrape:
+    post:
+      summary: Scrape a URL and get its content.
+      description: >
+        Scrape a given URL to retrieve content in markdown, HTML, or other
+        formats. This endpoint supports structured data extraction and dynamic
+        actions.
+      operationId: scrapeUrl
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL to scrape.
                 formats:
                   type: array
                   items:
@@ -31,79 +309,51 @@ paths:
                     enum:
                       - markdown
                       - html
-                      - rawHtml
-                      - links
-                      - screenshot
-                      - screenshot@fullPage
                       - extract
-                onlyMainContent:
-                  type: boolean
-                  default: true
-                  description: Only return the main content of the page excluding headers, navs, footers, etc.
-                includeTags:
-                  type: array
-                  items:
-                    type: string
-                  description: Tags to include in the output
-                excludeTags:
-                  type: array
-                  items:
-                    type: string
-                  description: Tags to exclude from the output
-                headers:
-                  type: object
-                  description: Headers to send with the request
-                waitFor:
-                  type: integer
-                  default: 0
-                  description: Delay in milliseconds before fetching content
-                mobile:
-                  type: boolean
-                  default: false
-                  description: Emulate scraping from a mobile device
-                skipTlsVerification:
-                  type: boolean
-                  default: false
-                  description: Skip TLS certificate verification
-                timeout:
-                  type: integer
-                  default: 30000
-                  description: Timeout in milliseconds
-                removeBase64Images:
-                  type: boolean
-                  default: true
-                  description: Remove base64 encoded images from output
+                  description: Output format(s) for the scraped data.
                 extract:
                   type: object
                   properties:
                     schema:
-                      type: object
-                      description: Schema for structured data extraction
+                      type: string
+                      description: The schema for structured data extraction.
                     systemPrompt:
                       type: string
-                      description: System prompt for extraction
+                      description: The system prompt used for extraction.
                     prompt:
                       type: string
-                      description: Extraction prompt without schema
+                      description: Extraction prompt without schema.
                 actions:
                   type: array
+                  description: >-
+                    List of actions to interact with dynamic content before
+                    scraping.
                   items:
                     type: object
                     properties:
                       type:
                         type: string
-                        enum: [wait, click, write, press, screenshot]
+                        enum:
+                          - wait
+                          - click
+                          - write
+                          - press
+                          - screenshot
                       selector:
                         type: string
+                        description: The CSS selector for `click` and `write` actions.
                       milliseconds:
                         type: integer
+                        description: Milliseconds to wait for `wait` action.
                       text:
                         type: string
+                        description: Text for `write` action.
                       key:
                         type: string
+                        description: Key for `press` action.
       responses:
         '200':
-          description: Successful response
+          description: Scraping successful.
           content:
             application/json:
               schema:
@@ -116,16 +366,21 @@ paths:
                     properties:
                       markdown:
                         type: string
+                        description: Scraped content in markdown format.
                       html:
                         type: string
-                      rawHtml:
-                        type: string
-                      links:
-                        type: array
-                        items:
-                          type: string
-                      screenshot:
-                        type: string
+                        description: Scraped content in HTML format.
+                      extract:
+                        type: object
+                        description: Extracted structured data.
+                      actions:
+                        type: object
+                        properties:
+                          screenshots:
+                            type: array
+                            items:
+                              type: string
+                              description: Screenshot URLs.
                       metadata:
                         type: object
                         properties:
@@ -135,551 +390,88 @@ paths:
                             type: string
                           language:
                             type: string
+                          keywords:
+                            type: string
+                          robots:
+                            type: string
+                          ogTitle:
+                            type: string
+                          ogDescription:
+                            type: string
+                          ogUrl:
+                            type: string
+                          ogImage:
+                            type: string
                           sourceURL:
                             type: string
                           statusCode:
                             type: integer
-                          error:
-                            type: string
-
-  /batch/scrape:
-    post:
-      summary: Submit multiple URLs for batch scraping
-      description: Scrape multiple URLs in a single request
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - urls
-              properties:
-                urls:
-                  type: array
-                  items:
-                    type: string
-                  description: List of URLs to scrape
-                webhook:
-                  type: string
-                  description: Webhook URL for progress notifications
-                formats:
-                  type: array
-                  items:
-                    type: string
-                    enum:
-                      - markdown
-                      - html
-                      - rawHtml
-                      - links
-                      - screenshot
-                      - screenshot@fullPage
-                      - extract
-                onlyMainContent:
-                  type: boolean
-                  default: true
-                includeTags:
-                  type: array
-                  items:
-                    type: string
-                excludeTags:
-                  type: array
-                  items:
-                    type: string
-                headers:
-                  type: object
-                waitFor:
-                  type: integer
-                  default: 0
-                mobile:
-                  type: boolean
-                  default: false
-                skipTlsVerification:
-                  type: boolean
-                  default: false
-                timeout:
-                  type: integer
-                  default: 30000
-                removeBase64Images:
-                  type: boolean
-                  default: true
-                ignoreInvalidURLs:
-                  type: boolean
-                  default: false
-      responses:
-        '200':
-          description: Batch scrape job created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                  url:
-                    type: string
-                  invalidURLs:
-                    type: array
-                    items:
-                      type: string
-
-  /batch/scrape/{id}:
-    get:
-      summary: Get batch scrape status
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Batch scrape status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: [scraping, completed, failed]
-                  total:
-                    type: integer
-                  completed:
-                    type: integer
-                  creditsUsed:
-                    type: integer
-                  expiresAt:
-                    type: string
-                    format: date-time
-                  next:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        markdown:
-                          type: string
-                        html:
-                          type: string
-                        rawHtml:
-                          type: string
-                        links:
-                          type: array
-                          items:
-                            type: string
-                        screenshot:
-                          type: string
-                        metadata:
-                          type: object
-                          properties:
-                            title:
-                              type: string
-                            description:
-                              type: string
-                            language:
-                              type: string
-                            sourceURL:
-                              type: string
-                            statusCode:
-                              type: integer
-                            error:
-                              type: string
-
-  /crawl:
-    post:
-      summary: Submit a crawl job
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - url
-              properties:
-                url:
-                  type: string
-                excludePaths:
-                  type: array
-                  items:
-                    type: string
-                includePaths:
-                  type: array
-                  items:
-                    type: string
-                maxDepth:
-                  type: integer
-                  default: 2
-                ignoreSitemap:
-                  type: boolean
-                  default: false
-                limit:
-                  type: integer
-                  default: 10000
-                allowBackwardLinks:
-                  type: boolean
-                  default: false
-                allowExternalLinks:
-                  type: boolean
-                  default: false
-                webhook:
-                  type: string
-                scrapeOptions:
-                  type: object
-                  properties:
-                    formats:
-                      type: array
-                      items:
-                        type: string
-                        enum:
-                          - markdown
-                          - html
-                          - rawHtml
-                          - links
-                          - screenshot
-                    headers:
-                      type: object
-                    includeTags:
-                      type: array
-                      items:
-                        type: string
-                    excludeTags:
-                      type: array
-                      items:
-                        type: string
-                    onlyMainContent:
-                      type: boolean
-                      default: true
-                    removeBase64Images:
-                      type: boolean
-                      default: true
-                    mobile:
-                      type: boolean
-                      default: false
-                    waitFor:
-                      type: integer
-      responses:
-        '200':
-          description: Crawl job submitted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                  url:
-                    type: string
-
-  /crawl/{id}:
-    get:
-      summary: Get crawl status
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Crawl status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: [scraping, completed, failed]
-                  total:
-                    type: integer
-                  completed:
-                    type: integer
-                  creditsUsed:
-                    type: integer
-                  expiresAt:
-                    type: string
-                    format: date-time
-                  next:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        markdown:
-                          type: string
-                        html:
-                          type: string
-                        rawHtml:
-                          type: string
-                        links:
-                          type: array
-                          items:
-                            type: string
-                        screenshot:
-                          type: string
-                        metadata:
-                          type: object
-                          properties:
-                            title:
-                              type: string
-                            description:
-                              type: string
-                            language:
-                              type: string
-                            sourceURL:
-                              type: string
-                            statusCode:
-                              type: integer
-                            error:
-                              type: string
-    delete:
-      summary: Cancel crawl job
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Crawl job cancelled
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
-
+        '400':
+          description: Invalid input or URL.
+        '500':
+          description: Server error.
   /map:
     post:
       summary: Map a website and get URLs
+      description: >-
+        Map a URL and retrieve most links present on the website. Optionally,
+        use the `search` parameter to filter URLs by a specific keyword.
+      operationId: mapUrl
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - url
               properties:
                 url:
                   type: string
+                  description: The URL of the website to map.
+                  example: 'https://firecrawl.dev'
                 search:
                   type: string
-                ignoreSitemap:
-                  type: boolean
-                  default: true
-                sitemapOnly:
-                  type: boolean
-                  default: false
-                includeSubdomains:
-                  type: boolean
-                  default: false
-                limit:
-                  type: integer
-                  default: 5000
-                  maximum: 5000
+                  description: Search term to filter specific URLs.
+                  example: docs
       responses:
         '200':
-          description: Website mapped successfully
+          description: A successful response containing the list of URLs.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
+                  status:
+                    type: string
+                    example: success
                   links:
                     type: array
                     items:
                       type: string
-
-  /search:
-    post:
-      summary: Search and scrape web content
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - query
-              properties:
-                query:
-                  type: string
-                limit:
-                  type: integer
-                  default: 5
-                  minimum: 1
-                  maximum: 10
-                tbs:
-                  type: string
-                lang:
-                  type: string
-                  default: en
-                country:
-                  type: string
-                  default: us
-                location:
-                  type: string
-                timeout:
-                  type: integer
-                  default: 60000
-                scrapeOptions:
-                  type: object
-                  properties:
-                    formats:
-                      type: array
-                      items:
-                        type: string
-                        enum:
-                          - markdown
-                          - html
-                          - rawHtml
-                          - links
-                          - screenshot
-                          - screenshot@fullPage
-                          - extract
-      responses:
-        '200':
-          description: Search results
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        url:
-                          type: string
-                        markdown:
-                          type: string
-                        html:
-                          type: string
-                        rawHtml:
-                          type: string
-                        links:
-                          type: array
-                          items:
-                            type: string
-                        screenshot:
-                          type: string
-                        metadata:
-                          type: object
-                          properties:
-                            title:
-                              type: string
-                            description:
-                              type: string
-                            sourceURL:
-                              type: string
-                            statusCode:
-                              type: integer
-                            error:
-                              type: string
-                  warning:
-                    type: string
-
-  /extract:
-    post:
-      summary: Extract structured data from URLs
-      description: Extract structured data from one or multiple URLs using prompts or schemas
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - urls
-              properties:
-                urls:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of URLs to extract from. Supports wildcards (e.g., example.com/*)
-                prompt:
-                  type: string
-                  description: Natural language prompt describing the data to extract
-                schema:
-                  type: object
-                  description: JSON schema defining the structure of data to extract
-                enableWebSearch:
-                  type: boolean
-                  default: false
-                  description: Allow extraction to follow links outside specified domain
-      responses:
-        '200':
-          description: Successful extraction
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                  status:
-                    type: string
-                    enum: [completed, pending, failed, cancelled]
-                  expiresAt:
-                    type: string
-                    format: date-time
-
-  /extract/{id}:
-    get:
-      summary: Get extraction job status
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Extraction job status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      type: object
-                  status:
-                    type: string
-                    enum: [completed, pending, failed, cancelled]
-                  expiresAt:
-                    type: string
-                    format: date-time
-
+                    example:
+                      - 'https://firecrawl.dev'
+                      - 'https://www.firecrawl.dev/pricing'
+                      - 'https://www.firecrawl.dev/blog'
+        '400':
+          description: Bad request due to invalid input.
+        '401':
+          description: Unauthorized request. The API key is missing or invalid.
+        '500':
+          description: Server error.
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ExtractSchema:
+      type: object
+      properties:
+        company_mission:
+          type: string
+        supports_sso:
+          type: boolean
+        is_open_source:
+          type: boolean
+        is_in_yc:
+          type: boolean
