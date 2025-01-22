@@ -601,6 +601,83 @@ paths:
                   warning:
                     type: string
 
+  /extract:
+    post:
+      summary: Extract structured data from URLs
+      description: Extract structured data from one or multiple URLs using prompts or schemas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - urls
+              properties:
+                urls:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of URLs to extract from. Supports wildcards (e.g., example.com/*)
+                prompt:
+                  type: string
+                  description: Natural language prompt describing the data to extract
+                schema:
+                  type: object
+                  description: JSON schema defining the structure of data to extract
+                enableWebSearch:
+                  type: boolean
+                  default: false
+                  description: Allow extraction to follow links outside specified domain
+      responses:
+        '200':
+          description: Successful extraction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                  status:
+                    type: string
+                    enum: [completed, pending, failed, cancelled]
+                  expiresAt:
+                    type: string
+                    format: date-time
+
+  /extract/{id}:
+    get:
+      summary: Get extraction job status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Extraction job status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  status:
+                    type: string
+                    enum: [completed, pending, failed, cancelled]
+                  expiresAt:
+                    type: string
+                    format: date-time
+
 components:
   securitySchemes:
     BearerAuth:
