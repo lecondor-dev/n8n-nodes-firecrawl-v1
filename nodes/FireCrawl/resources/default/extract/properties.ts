@@ -11,7 +11,7 @@ export const properties: INodeProperties[] = [
     },
     default: '',
     required: true,
-    description: 'URLs to extract data from. Can include wildcards (e.g., example.com/*)',
+    description: 'URLs to extract data from. Can include wildcards (e.g., example.com/*).',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -34,7 +34,7 @@ export const properties: INodeProperties[] = [
       },
     ],
     default: 'prompt',
-    description: 'Whether to use a natural language prompt or a JSON schema for extraction',
+    description: 'Whether to use a natural language prompt or a JSON schema for extraction.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -50,7 +50,7 @@ export const properties: INodeProperties[] = [
       rows: 4,
     },
     default: '',
-    description: 'Natural language prompt describing the data to extract',
+    description: 'Natural language prompt describing the data to extract.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -64,7 +64,7 @@ export const properties: INodeProperties[] = [
     name: 'schema',
     type: 'json',
     default: '{\n  "company_mission": "string",\n  "supports_sso": "boolean",\n  "is_open_source": "boolean"\n}',
-    description: 'JSON schema defining the structure of data to extract',
+    description: 'JSON schema defining the structure of data to extract.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -78,7 +78,7 @@ export const properties: INodeProperties[] = [
     name: 'enableWebSearch',
     type: 'boolean',
     default: false,
-    description: 'Whether extraction can follow links outside specified domain',
+    description: 'Whether extraction can follow links outside specified domain.',
     displayOptions: {
       show: {
         resource: ['Default'],
