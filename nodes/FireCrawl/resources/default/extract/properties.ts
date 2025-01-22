@@ -11,7 +11,7 @@ export const properties: INodeProperties[] = [
     },
     default: '',
     required: true,
-    description: 'URLs to extract data from. Can include wildcards (e.g., example.com/*)',
+    description: 'URLs to extract data from. Can include wildcards (e.g., example.com/*).',
     displayOptions: {
       show: {
         resource: ['Default'],
