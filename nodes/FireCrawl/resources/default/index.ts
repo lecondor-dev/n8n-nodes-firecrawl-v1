@@ -23,15 +23,17 @@ import * as submitACrawlJobWithAWebhook from './submit-a-crawl-job-with-a-webhoo
 import * as scrapeAUrlAndGetItsContent from './scrape-a-url-and-get-its-content'
 import * as mapAWebsiteAndGetUrls from './map-a-website-and-get-urls'
 import * as batchScrape from './batch-scrape'
+import * as extract from './extract'
 
 const operations: INodePropertyOptions[] = [
-	submitACrawlJob.option,
-	checkCrawlJobStatus.option,
-	crawlUrlWithWebsocketMonitoring.option,
-	submitACrawlJobWithAWebhook.option,
-	scrapeAUrlAndGetItsContent.option,
-	mapAWebsiteAndGetUrls.option,
-	batchScrape.option,
+submitACrawlJob.option,
+checkCrawlJobStatus.option,
+crawlUrlWithWebsocketMonitoring.option,
+submitACrawlJobWithAWebhook.option,
+scrapeAUrlAndGetItsContent.option,
+mapAWebsiteAndGetUrls.option,
+batchScrape.option,
+extract.option,
 ]
 
 export const name = 'Default'
@@ -56,14 +58,15 @@ operationSelect.options = operations
 operationSelect.default = operations.length > 0 ? operations[0].value : ''
 
 export const rawProperties: INodeProperties[] = [
-	operationSelect,
-	...submitACrawlJob.properties,
-	...checkCrawlJobStatus.properties,
-	...crawlUrlWithWebsocketMonitoring.properties,
-	...submitACrawlJobWithAWebhook.properties,
-	...scrapeAUrlAndGetItsContent.properties,
-	...mapAWebsiteAndGetUrls.properties,
-	...batchScrape.properties,
+operationSelect,
+...submitACrawlJob.properties,
+...checkCrawlJobStatus.properties,
+...crawlUrlWithWebsocketMonitoring.properties,
+...submitACrawlJobWithAWebhook.properties,
+...scrapeAUrlAndGetItsContent.properties,
+...mapAWebsiteAndGetUrls.properties,
+...batchScrape.properties,
+...extract.properties,
 ]
 
 const { properties, methods } = runHooks(rawProperties)
