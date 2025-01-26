@@ -2,35 +2,12 @@ import { INodeProperties } from 'n8n-workflow';
 
 export const properties: INodeProperties[] = [
   {
-    displayName: 'URLs',
-    name: 'urls',
-    type: 'fixedCollection',
-    typeOptions: {
-      multipleValues: true,
-      multipleValueButtonText: 'Add URL',
-      sortable: true
-    },
-    default: {},
-    options: [
-      {
-        name: 'values',
-        displayName: 'URLs',
-        values: [
-          {
-            displayName: 'URL',
-            name: 'url',
-            type: 'string',
-            default: '',
-            placeholder: 'https://example.com/*',
-            description: 'URL to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
-            required: true,
-            typeOptions: {
-              password: false
-            }
-          },
-        ],
-      },
-    ],
+    displayName: 'URL',
+    name: 'url',
+    type: 'string',
+    default: '',
+    placeholder: 'https://example.com/*',
+    description: 'URL to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
     required: true,
     displayOptions: {
       show: {

@@ -27,14 +27,10 @@ export async function preSendActionCustonBody (
   const { customBody } = body;
 
   if (typeof body === 'object' && typeof customBody === 'object') {
-    // Handle URLs collection
-    if (body.urls && typeof body.urls === 'object') {
-      const urlsCollection = body.urls as { values?: Array<{ url: string }> };
-      if (urlsCollection.values && Array.isArray(urlsCollection.values)) {
-        body.urls = urlsCollection.values.map(item => item.url || '').filter(url => url !== '');
-      } else {
-        body.urls = [];
-      }
+    // Handle single URL
+    if (body.url && typeof body.url === 'string') {
+      body.urls = [body.url];
+      delete body.url;
     }
 
     requestOptions.body = {
