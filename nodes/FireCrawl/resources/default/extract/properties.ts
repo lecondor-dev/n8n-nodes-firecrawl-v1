@@ -9,7 +9,7 @@ export const properties: INodeProperties[] = [
       multipleValues: true,
       multipleValueButtonText: 'Add URL',
     },
-    default: '',
+    default: [],
     required: true,
     description: 'Enter one or more URLs to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
     displayOptions: {
@@ -57,7 +57,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extractData'],
+        operation: ['Extract'],
         extractType: ['prompt'],
       },
     },
@@ -103,7 +103,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extractData'],
+        operation: ['Extract'],
       },
     },
   },

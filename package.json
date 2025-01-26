@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-firecrawl-v1",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "FireCrawl nodes for n8n",
   "keywords": [
     "n8n-community-node-package",
