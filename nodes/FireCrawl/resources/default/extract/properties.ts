@@ -6,9 +6,9 @@ export const properties: INodeProperties[] = [
     name: 'url',
     type: 'string',
     default: '',
+    required: true,
     placeholder: 'https://example.com/*',
     description: 'URL to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
-    required: true,
     displayOptions: {
       show: {
         resource: ['Default'],
