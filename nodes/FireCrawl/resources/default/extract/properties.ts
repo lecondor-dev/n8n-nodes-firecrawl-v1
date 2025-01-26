@@ -15,7 +15,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extractData'],
       },
     },
   },
@@ -40,7 +40,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extractData'],
       },
     },
   },
@@ -57,7 +57,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extractData'],
         extractType: ['prompt'],
       },
     },
@@ -89,7 +89,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extractData'],
         extractType: ['schema'],
       },
     },
@@ -103,7 +103,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extractData'],
       },
     },
   },

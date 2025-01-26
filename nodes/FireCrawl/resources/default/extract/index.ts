@@ -2,8 +2,8 @@ import { runHooks } from './hooks';
 import { properties as rawProperties } from './properties';
 
 export const option = {
-  name: 'Extract Structured Data',
-  value: 'Extract',
+  name: '🔍 Extract Data (AI)',
+  value: 'extractData',
   description: 'Extract structured data from any webpage using AI',
   action: 'Extract structured data',
   details: 'Automatically extract structured data from webpages using either simple prompts or JSON schemas. Perfect for gathering product information, company details, or any other structured web data.',
