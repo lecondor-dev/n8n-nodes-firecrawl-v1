@@ -27,12 +27,6 @@ export async function preSendActionCustonBody (
   const { customBody } = body;
 
   if (typeof body === 'object' && typeof customBody === 'object') {
-    // Handle single URL
-    if (body.url && typeof body.url === 'string') {
-      body.urls = [body.url];
-      delete body.url;
-    }
-
     requestOptions.body = {
       ...body,
       ...customBody,
