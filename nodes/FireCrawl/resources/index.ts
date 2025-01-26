@@ -4,15 +4,6 @@
 /* eslint-disable n8n-nodes-base/node-param-description-boolean-without-whether */
 /* eslint-disable n8n-nodes-base/node-param-options-type-unsorted-items */
 
-/**
- * The following code was generated create-n8n-nodes tool.
- *
- * This file was automatically generated and should not be edited.
- *
- * If changes are required, please refer to the templates and scripts in the repository.
- * Repository: https://github.com/oneflow-vn/create-n8n-nodes
- */
-
 import { INodeProperties } from 'n8n-workflow'
 
 // @ts-ignore
@@ -29,7 +20,7 @@ const resourceSelect: INodeProperties[] = [
   {
     displayName: 'Resource',
     name: 'resource',
-    type: 'hidden',
+    type: 'options',
     noDataExpression: true,
     options: [
       {
@@ -37,7 +28,8 @@ const resourceSelect: INodeProperties[] = [
         value: 'Default',
       },
     ],
-    default: '',
+    default: 'Default',
+    required: true,
   },
 ]
 
