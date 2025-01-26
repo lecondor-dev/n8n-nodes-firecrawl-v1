@@ -169,7 +169,7 @@ const extraProperties: INodeProperties[] = [
     displayName: 'Custom Body',
     name: 'customBody',
     type: 'json',
-    default: '{\n  "urls": ["https://example.com/*"],\n  "prompt": "Extract company information",\n  "schema": {\n    "company_mission": "string",\n    "supports_sso": "boolean",\n    "is_open_source": "boolean"\n  },\n  "enableWebSearch": false\n}',
+    default: '{\n  "url": "https://example.com/*",\n  "prompt": "Extract company information",\n  "schema": {\n    "company_mission": "string",\n    "supports_sso": "boolean",\n    "is_open_source": "boolean"\n  },\n  "enableWebSearch": false\n}',
     description: 'Custom body to send',
     routing: {
       request: {
