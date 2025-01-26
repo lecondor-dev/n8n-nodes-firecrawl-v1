@@ -7,16 +7,14 @@ export const properties: INodeProperties[] = [
     type: 'fixedCollection',
     typeOptions: {
       multipleValues: true,
+      multipleValueButtonText: 'Add URL',
+      sortable: true
     },
-    default: {
-      values: [{
-        url: ''
-      }]
-    },
+    default: {},
     options: [
       {
         name: 'values',
-        displayName: 'URL',
+        displayName: 'URLs',
         values: [
           {
             displayName: 'URL',
@@ -25,6 +23,10 @@ export const properties: INodeProperties[] = [
             default: '',
             placeholder: 'https://example.com/*',
             description: 'URL to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
+            required: true,
+            typeOptions: {
+              password: false
+            }
           },
         ],
       },
