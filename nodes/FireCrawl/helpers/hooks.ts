@@ -19,22 +19,31 @@ export async function preSendActionCustonBody (
   this: IExecuteSingleFunctions,
   requestOptions: IHttpRequestOptions
 ): Promise<IHttpRequestOptions> {
-  const { customBody } = requestOptions.body as IDataObject
-
-  if (
-    typeof requestOptions.body === 'object' &&
-    typeof customBody === 'object'
-  ) {
-    // @ts-ignore
-    requestOptions.body = {
-      ...requestOptions.body,
-      ...customBody,
-    }
-    // @ts-ignore
-    delete requestOptions.body.customBody
+  if (!requestOptions.body) {
+    return Promise.resolve(requestOptions);
   }
 
-  return Promise.resolve(requestOptions)
+  const body = requestOptions.body as IDataObject;
+  const { customBody } = body;
+
+  if (typeof body === 'object' && typeof customBody === 'object') {
+    // Handle URLs collection
+    if (body.urls && typeof body.urls === 'object') {
+      const urlsCollection = body.urls as { values?: Array<{ url: string }> };
+      if (urlsCollection.values) {
+        body.urls = urlsCollection.values.map(item => item.url);
+      }
+    }
+
+    requestOptions.body = {
+      ...body,
+      ...customBody,
+    };
+
+    delete (requestOptions.body as IDataObject).customBody;
+  }
+
+  return Promise.resolve(requestOptions);
 }
 
 /* eslint-disable indent */
