@@ -1,23 +1,5 @@
 import { IHookFunctions } from 'n8n-workflow';
 
-export async function validateURLs(this: IHookFunctions): Promise<boolean> {
-  const urls = this.getNodeParameter('urls.values', []) as Array<{ url: string }>;
-  
-  if (urls.length === 0) {
-    throw new Error('At least one URL must be provided');
-  }
-
-  for (const { url } of urls) {
-    try {
-      new URL(url);
-    } catch (error) {
-      throw new Error(`Invalid URL format: ${url}`);
-    }
-  }
-
-  return true;
-}
-
 export async function validateSingleURL(this: IHookFunctions): Promise<boolean> {
   const url = this.getNodeParameter('url', '') as string;
   
@@ -55,21 +37,7 @@ export async function validateExtractionParameters(this: IHookFunctions): Promis
 }
 
 export async function validateParameters(this: IHookFunctions): Promise<boolean> {
-  const urls = this.getNodeParameter('urls.values', []) as Array<{ url: string }>;
-  const singleUrl = this.getNodeParameter('url', '') as string;
-  
-  if (urls.length > 0 && singleUrl) {
-    throw new Error('Cannot use both single URL and multiple URLs. Please use one or the other.');
-  }
-
-  if (urls.length > 0) {
-    await validateURLs.call(this);
-  } else if (singleUrl) {
-    await validateSingleURL.call(this);
-  } else {
-    throw new Error('At least one URL must be provided');
-  }
-
+  await validateSingleURL.call(this);
   await validateExtractionParameters.call(this);
   
   return true;
