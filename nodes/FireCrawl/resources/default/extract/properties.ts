@@ -11,7 +11,7 @@ export const properties: INodeProperties[] = [
     },
     default: '',
     required: true,
-    description: 'URLs to extract data from. Can include wildcards (e.g., example.com/*).',
+    description: 'Enter one or more URLs to extract data from. Use wildcards (e.g., example.com/*) to crawl entire domains or sections.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -25,16 +25,18 @@ export const properties: INodeProperties[] = [
     type: 'options',
     options: [
       {
-        name: 'Use Prompt',
+        name: 'Simple Prompt (Recommended)',
         value: 'prompt',
+        description: 'Use natural language to describe what data to extract',
       },
       {
-        name: 'Use Schema',
+        name: 'JSON Schema',
         value: 'schema',
+        description: 'Define exact structure of data to extract',
       },
     ],
     default: 'prompt',
-    description: 'Whether to use a natural language prompt or a JSON schema for extraction',
+    description: 'Choose between using a simple prompt or detailed JSON schema for data extraction',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -49,8 +51,9 @@ export const properties: INodeProperties[] = [
     typeOptions: {
       rows: 4,
     },
-    default: '',
-    description: 'Natural language prompt describing the data to extract',
+    default: 'Extract the following information:\n- Product name and price\n- Main features and benefits\n- Customer ratings if available\n- Contact information',
+    placeholder: 'Describe what information you want to extract...',
+    description: 'Describe in natural language what data you want to extract. Be specific about the information you need.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -63,8 +66,26 @@ export const properties: INodeProperties[] = [
     displayName: 'Schema',
     name: 'schema',
     type: 'json',
-    default: '{\n  "company_mission": "string",\n  "supports_sso": "boolean",\n  "is_open_source": "boolean"\n}',
-    description: 'JSON schema defining the structure of data to extract',
+    default: `{
+  "product": {
+    "name": "string",
+    "price": "number",
+    "currency": "string"
+  },
+  "features": ["string"],
+  "specifications": {
+    "dimensions": "string",
+    "weight": "string",
+    "color": "string"
+  },
+  "ratings": {
+    "average_score": "number",
+    "total_reviews": "number"
+  },
+  "availability": "boolean",
+  "last_updated": "string"
+}`,
+    description: 'Define the structure of data to extract using a JSON schema. Use "string", "number", "boolean", or arrays ([]) for lists.',
     displayOptions: {
       show: {
         resource: ['Default'],
@@ -78,7 +99,7 @@ export const properties: INodeProperties[] = [
     name: 'enableWebSearch',
     type: 'boolean',
     default: false,
-    description: 'Whether extraction can follow links outside specified domain',
+    description: 'Whether the extraction can follow relevant links to gather additional context and information',
     displayOptions: {
       show: {
         resource: ['Default'],
