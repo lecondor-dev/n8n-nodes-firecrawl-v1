@@ -1,18 +1,3 @@
-/* eslint-disable n8n-nodes-base/node-param-option-description-identical-to-name */
-/* eslint-disable n8n-nodes-base/node-param-display-name-miscased-id */
-/* eslint-disable n8n-nodes-base/node-param-display-name-miscased-id */
-/* eslint-disable n8n-nodes-base/node-param-description-boolean-without-whether */
-/* eslint-disable n8n-nodes-base/node-param-options-type-unsorted-items */
-
-/**
- * The following code was generated create-n8n-nodes tool.
- *
- * This file was automatically generated and should not be edited.
- *
- * If changes are required, please refer to the templates and scripts in the repository.
- * Repository: https://github.com/oneflow-vn/create-n8n-nodes
- */
-
 import { INodeProperties, INodePropertyOptions } from 'n8n-workflow'
 import { runHooks } from './hooks'
 
@@ -26,47 +11,42 @@ import * as batchScrape from './batch-scrape'
 import * as extract from './extract'
 
 const operations: INodePropertyOptions[] = [
-submitACrawlJob.option,
-checkCrawlJobStatus.option,
-crawlUrlWithWebsocketMonitoring.option,
-submitACrawlJobWithAWebhook.option,
-scrapeAUrlAndGetItsContent.option,
-mapAWebsiteAndGetUrls.option,
-batchScrape.option,
-extract.option,
+  extract.option,
+  submitACrawlJob.option,
+  checkCrawlJobStatus.option,
+  crawlUrlWithWebsocketMonitoring.option,
+  submitACrawlJobWithAWebhook.option,
+  scrapeAUrlAndGetItsContent.option,
+  mapAWebsiteAndGetUrls.option,
+  batchScrape.option,
 ]
 
 export const name = 'Default'
 
 const operationSelect: INodeProperties = {
-	displayName: 'Operation',
-	name: 'operation',
-	type: 'options',
-	noDataExpression: true,
-	displayOptions: {
-		show: {
-			resource: ['Default'],
-		},
-	},
-	default: '',
+  displayName: 'Operation',
+  name: 'operation',
+  type: 'options',
+  noDataExpression: true,
+  displayOptions: {
+    show: {
+      resource: ['Default'],
+    },
+  },
+  options: operations,
+  default: 'Extract',
 }
 
-// overwrite the options of the operationSelect
-operationSelect.options = operations
-
-// set the default operation
-operationSelect.default = operations.length > 0 ? operations[0].value : ''
-
 export const rawProperties: INodeProperties[] = [
-operationSelect,
-...submitACrawlJob.properties,
-...checkCrawlJobStatus.properties,
-...crawlUrlWithWebsocketMonitoring.properties,
-...submitACrawlJobWithAWebhook.properties,
-...scrapeAUrlAndGetItsContent.properties,
-...mapAWebsiteAndGetUrls.properties,
-...batchScrape.properties,
-...extract.properties,
+  operationSelect,
+  ...extract.properties,
+  ...submitACrawlJob.properties,
+  ...checkCrawlJobStatus.properties,
+  ...crawlUrlWithWebsocketMonitoring.properties,
+  ...submitACrawlJobWithAWebhook.properties,
+  ...scrapeAUrlAndGetItsContent.properties,
+  ...mapAWebsiteAndGetUrls.properties,
+  ...batchScrape.properties,
 ]
 
 const { properties, methods } = runHooks(rawProperties)

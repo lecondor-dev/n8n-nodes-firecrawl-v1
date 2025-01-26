@@ -2,27 +2,6 @@ import { INodeProperties } from 'n8n-workflow';
 
 export const properties: INodeProperties[] = [
   {
-    displayName: 'Operation',
-    name: 'operation',
-    type: 'options',
-    noDataExpression: true,
-    options: [
-      {
-        name: 'Extract',
-        value: 'Extract',
-        description: 'Extract data from a URL',
-        action: 'Extract data from a URL',
-      },
-    ],
-    default: 'Extract',
-    required: true,
-    displayOptions: {
-      show: {
-        resource: ['Default'],
-      },
-    },
-  },
-  {
     displayName: 'URL',
     name: 'url',
     type: 'string',
