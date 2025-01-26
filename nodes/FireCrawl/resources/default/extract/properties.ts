@@ -17,39 +17,6 @@ export const properties: INodeProperties[] = [
     },
   },
   {
-    displayName: 'URLs',
-    name: 'urls',
-    type: 'fixedCollection',
-    placeholder: 'Add URL',
-    default: { values: { urls: [] } },
-    typeOptions: {
-      multipleValues: true,
-    },
-    description: 'Multiple URLs to extract data from',
-    displayOptions: {
-      show: {
-        resource: ['Default'],
-        operation: ['Extract'],
-      },
-    },
-    options: [
-      {
-        name: 'values',
-        displayName: 'URL',
-        values: [
-          {
-            displayName: 'URL',
-            name: 'url',
-            type: 'string',
-            required: true,
-            default: '',
-            placeholder: 'https://example.com/*'
-          }
-        ]
-      }
-    ]
-  },
-  {
     displayName: 'Extract Type',
     name: 'extractType',
     type: 'options',
