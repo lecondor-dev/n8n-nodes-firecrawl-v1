@@ -6,6 +6,8 @@ export function runHooks (properties: INodeProperties[]): {
 } {
   return {
     properties,
-    methods: {},
+    methods: {
+      loadOptions: {},
+    },
   }
 }

@@ -2,6 +2,27 @@ import { INodeProperties } from 'n8n-workflow';
 
 export const properties: INodeProperties[] = [
   {
+    displayName: 'Operation',
+    name: 'operation',
+    type: 'options',
+    noDataExpression: true,
+    options: [
+      {
+        name: 'Extract',
+        value: 'extract',
+        description: 'Extract data from a URL',
+        action: 'Extract data from a URL',
+      },
+    ],
+    default: 'extract',
+    required: true,
+    displayOptions: {
+      show: {
+        resource: ['Default'],
+      },
+    },
+  },
+  {
     displayName: 'URL',
     name: 'url',
     type: 'string',
@@ -12,7 +33,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extract'],
       },
     },
   },
@@ -37,7 +58,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extract'],
       },
     },
   },
@@ -54,7 +75,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extract'],
         extractType: ['prompt'],
       },
     },
@@ -86,7 +107,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extract'],
         extractType: ['schema'],
       },
     },
@@ -100,7 +121,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['Extract'],
+        operation: ['extract'],
       },
     },
   },
