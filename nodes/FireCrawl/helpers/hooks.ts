@@ -30,8 +30,10 @@ export async function preSendActionCustonBody (
     // Handle URLs collection
     if (body.urls && typeof body.urls === 'object') {
       const urlsCollection = body.urls as { values?: Array<{ url: string }> };
-      if (urlsCollection.values) {
-        body.urls = urlsCollection.values.map(item => item.url);
+      if (urlsCollection.values && Array.isArray(urlsCollection.values)) {
+        body.urls = urlsCollection.values.map(item => item.url || '').filter(url => url !== '');
+      } else {
+        body.urls = [];
       }
     }
 

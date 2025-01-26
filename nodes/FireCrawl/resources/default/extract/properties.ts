@@ -9,7 +9,9 @@ export const properties: INodeProperties[] = [
       multipleValues: true,
     },
     default: {
-      values: []
+      values: [{
+        url: ''
+      }]
     },
     options: [
       {
