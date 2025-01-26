@@ -9,12 +9,12 @@ export const properties: INodeProperties[] = [
     options: [
       {
         name: 'Extract',
-        value: 'extract',
+        value: 'Extract',
         description: 'Extract data from a URL',
         action: 'Extract data from a URL',
       },
     ],
-    default: 'extract',
+    default: 'Extract',
     required: true,
     displayOptions: {
       show: {
@@ -33,7 +33,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extract'],
+        operation: ['Extract'],
       },
     },
   },
@@ -58,7 +58,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extract'],
+        operation: ['Extract'],
       },
     },
   },
@@ -75,7 +75,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extract'],
+        operation: ['Extract'],
         extractType: ['prompt'],
       },
     },
@@ -107,7 +107,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extract'],
+        operation: ['Extract'],
         extractType: ['schema'],
       },
     },
@@ -121,7 +121,7 @@ export const properties: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['Default'],
-        operation: ['extract'],
+        operation: ['Extract'],
       },
     },
   },
